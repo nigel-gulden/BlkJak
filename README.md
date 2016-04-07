@@ -21,7 +21,7 @@ The table will appear in a similar fashion to this.<br>
 
 **Contributors:** Any beneficial contributions, as well as their authors will be added here and kudos'd.
 
-**Credits:* All inspirations, asset authors, or contributions that were not appropriate for the contributors section will go here. 
+**Credits:** All inspirations, asset authors, or contributions that were not appropriate for the contributors section will go here. 
 
 **License:** <br>
 Copyright (C) 2016  Nigel Gulden, Justin Broughton
