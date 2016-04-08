@@ -1,4 +1,5 @@
-# JumpinJack's Blackjack
+![alt text](https://github.com/nigel-gulden/gui-rpg/blob/master/readme_elem/Logo.png?raw=true "Logo")
+# BlkJak
 
 **Description:** Blackjack application that will have full animation of cards, different card faces and backs, as well as allow for play against the house or a friend. Current work is supported by Windows only. Built using C++ and the QT framework.
 
@@ -20,7 +21,7 @@ The table will appear in a similar fashion to this.<br>
 
 **Contributors:** Any beneficial contributions, as well as their authors will be added here and kudos'd.
 
-**Credits:* All inspirations, asset authors, or contributions that were not appropriate for the contributors section will go here. 
+**Credits:** All inspirations, asset authors, or contributions that were not appropriate for the contributors section will go here. 
 
 **License:** <br>
 Copyright (C) 2016  Nigel Gulden, Justin Broughton
