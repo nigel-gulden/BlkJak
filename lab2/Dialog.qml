@@ -6,9 +6,6 @@ Rectangle {
 
     property alias textbox: t1
 
-
-
-
     TextRect{
         id: t1
 

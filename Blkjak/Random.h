@@ -12,7 +12,9 @@
 
 class Random
 {
-public:
+
+
+public slots:
 	Random()
 	{ // Seed for random-number generation 
 		srand(static_cast<unsigned> (time(0)));

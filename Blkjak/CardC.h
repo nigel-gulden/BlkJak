@@ -15,54 +15,44 @@
 *		Returns the value in m_rank
 *	Suit GetSuit();
 *		Returns the value in m_suit
-* Methods
-*	void DisplayCard()
-*		Displays the information of the card
 *************************************************************************/
 
 #ifndef CARD_H
 #define CARD_H
+#include <QObject>
 
-#include <iostream>
-using std::cout;
-using std::endl;
-#include <iomanip>
-using std::setw;
-using std::left;
 
 //enumerated data types for rank and suit
-enum Rank { ACE = 1, DEUCE, TREY, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING };
-enum Suit { HEART = 1, DIAMOND, CLUB, SPADE };
 
-class Card
+
+class CardC : public QObject
 {
-	
+
+    Q_OBJECT
+    Q_PROPERTY(int m_rank READ GetRank WRITE SetRank)
+    Q_PROPERTY(int m_suit READ GetSuit WRITE SetSuit)
+
 public:
-	/**************************************************************
-	*	Purpose:  Constructs the Card object
-	*
-	*	Entry:  Rank rank and Suit suit, defaulted to ACE and SPADES
-	*
-	*	 Exit:  Sets m_rank and m_suit to assigned values
-	****************************************************************/
-    Card(Rank rank = ACE, Suit suit = SPADE) : m_rank(rank), m_suit(suit){}
 
-    Card(const Card & card);
+    CardC(int rank = 0, int suit = 0) : m_rank(rank), m_suit(suit){}
 
-	//displays data in Card
-	void DisplayCard();
-	
-	//mutators for class
-	void SetRank(Rank rank);
-	void SetSuit(Suit suit);
-	Rank GetRank();
-	Suit GetSuit();
+    CardC(const CardC & card);
+        void operator= (const CardC & rhs);
 
-	void operator= (const Card & rhs);
+public slots:
+    void Copy(CardC card);
+    void SetRank(int rank);
+    void SetSuit(int suit);
+    int GetRank();
+    int GetSuit();
+
+
 
 private:
-	Rank m_rank;
-	Suit m_suit;
+    int m_rank;
+    int m_suit;
 };
-
+Q_DECLARE_METATYPE(CardC)
 #endif
+
+//done

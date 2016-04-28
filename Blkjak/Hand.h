@@ -1,22 +1,35 @@
 #ifndef HAND_H
 #define HAND_H
-#include "Card.h"
-class Hand
+#include "CardC.h"
+#include <QObject>
+
+class Hand : public QObject
 {
+    Q_OBJECT
+
+    Q_PROPERTY(int mCount READ GetmCount)
 public:
 	Hand();
-	virtual ~Hand();
+    Hand(const Hand & rhs);
+    ~Hand();
+    Hand& operator= (const Hand& rhs);
 
+public slots:
+    CardC* getCardAt(int index);
 	int GetmCount();
 
-	void Hit(const Card & dealt);
-	Rank GetRank(int cardNum);
-	void DisplayCard(int i);
+
+    void Hit(const CardC & dealt);
+
 	int FindCardTotal();
 
+
 private:
-	Card ** mCards;
+
+    CardC * mCards;
 	int mCount;
 };
-
+Q_DECLARE_METATYPE(Hand)
 #endif
+
+//prob done

@@ -10,6 +10,8 @@ Rectangle{
     onTextstringChanged: t_text.text = textstring
     onTextcolorChanged: t_text.color = textcolor
 
+
+
     Text{
         id: t_text
         anchors.horizontalCenter: t_rect.horizontalCenter

@@ -4,5 +4,8 @@
         <file>TextRect.qml</file>
         <file>Button.qml</file>
         <file>Dialog.qml</file>
+        <file>../Blkjak/Button.qml</file>
+        <file>../Blkjak/Dialog.qml</file>
+        <file>../Blkjak/TextRect.qml</file>
     </qresource>
 </RCC>

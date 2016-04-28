@@ -47,40 +47,52 @@
 *************************************************************************/
 #ifndef BLACKJACK_H
 #define BLACKJACK_H
-#include <conio.h>
 
-#include <Windows.h>
-#include <MMSystem.h>
-
-#pragma comment(lib,"winmm.lib")
+#include <QObject>
 
 #include "Deck.h"
-#include "Dealer.h"
-#include "Player.h"
-#include "Bankroll.h"
+#include "Hand.h"
+#include "CardC.h"
 
-class Blackjack
+class Blackjack : public QObject
 {
+    Q_OBJECT
+
+    Q_PROPERTY(int playerBank READ getBankroll WRITE setBankroll)
+    Q_PROPERTY(int mPot READ getPot WRITE setPot)
 public:
-	Blackjack(int bankroll);
-	void PlayTheGame();
-	void DisplayHands();
-	bool Continue();
+    Blackjack();
+
+public slots:
+    void dealIn();
+    void setBankroll(int bankroll);
+    int getBankroll();
+    void setPot(int pot);
+    int getPot();
 	void Win21();
 	void Win();
 	void Tie();
 	bool DealerHand();
-	bool PlayerHand(bool & twentyOne);
-	bool HitPlayer();
-	bool DoubleDown();
-	bool Wager();
+    CardC* getPlayerCardAt(int index);
+    CardC* getDealerCardAt(int index);
+    int getPlayerCardCount();
+    int getDealerCardCount();
+    int getPlayerTotal();
+    int getDealerTotal();
+    void HitPlayer();
+    void DoubleDown();
+    bool Wager(int wager);
+    bool CheckBust();
+    bool Check21();
 
+
+public:
+    Hand mPlayer;
+    Hand mDealer;
 private:
-	Player mPlayer;
-	Dealer mDealer;
 	Deck mDeck;
-	Bankroll playerBank;
-	Bankroll mPot;
+    int playerBank;
+    int mPot;
 };
 
 #endif

@@ -1,32 +1,63 @@
 #include "Hand.h"
 
-Hand::Hand() :mCount(0)
+Hand::Hand() :QObject(),
+    mCount(0)
 {
 	mCards = nullptr;
 }
+Hand::Hand(const Hand & rhs) : QObject()
+{
+     this->mCards = new CardC [rhs.mCount];
+
+    for(int i = 0; i < rhs.mCount; i++)
+    {
+        mCards[i] = rhs.mCards[i];
+    }
+    mCount = rhs.mCount;
+
+}
+
+Hand& Hand::operator=(const Hand& rhs)
+{
+   if(this != &rhs)
+   {
+       delete [] mCards;
+       mCards = new CardC [rhs.mCount];
+
+       for(int i = 0; i < rhs.mCount; i++)
+       {
+          mCards[i] = rhs.mCards[i];
+       }
+       mCount = rhs.mCount;
+   }
+   return *this;
+}
+
 
 Hand::~Hand()
 {
-	for (int i = 0; i < mCount; i++)
-	{
-		delete[] mCards[i];
-	}
+
 	delete[] mCards;
 	mCards = nullptr;
 	mCount = 0;
 }
 
-void Hand::Hit(const Card & dealt)
+CardC* Hand::getCardAt(int index)
 {
-	Card ** mTemp = new Card *[mCount + 1];
+    return &mCards[index];
+}
+
+void Hand::Hit(const CardC & dealt)
+{
+    CardC * mTemp = new CardC [mCount + 1];
 
 	for (int i = 0; i < mCount; i++)
 	{
 		mTemp[i] = mCards[i];
 	}
-	mTemp[mCount] = new Card;
 
-	*mTemp[mCount] = dealt;
+
+    mTemp[mCount] = dealt;
 
 	delete[] mCards;
 
@@ -39,15 +70,6 @@ int Hand::GetmCount()
 	return mCount;
 }
 
-Rank Hand::GetRank(int cardNum)
-{
-	return mCards[cardNum]->GetRank();
-}
-
-void Hand::DisplayCard(int i)
-{
-	mCards[i]->DisplayCard();
-}
 
 int Hand::FindCardTotal()
 {
@@ -56,17 +78,17 @@ int Hand::FindCardTotal()
 	int aceCheck = 0;
 	int optimalAce = 0;
 
-	int rank = 0;
+    int rank = 0;
 
 	for (int i = 0; i < mCount; i++)
 	{
-		rank = mCards[i]->GetRank();
-
-		if (rank > ACE && rank < TEN)
+        rank = mCards[i].GetRank();
+        rank++;
+        if (rank > 1 && rank < 10)
 		{
-			totalCount += rank;
+            totalCount += rank+1;
 		}
-		else if (rank == ACE)
+        else if (rank == 1)
 		{
 			aceCheck++;
 		}
@@ -87,7 +109,7 @@ int Hand::FindCardTotal()
 	for (int i = 0; i < aceCheck; i++)
 	{
 		//if the total value is greater than 21
-		if (totalCount > 21)
+        if (totalCount > 21)
 		{
 			//make one of the aces a 1
 			totalCount -= 10;

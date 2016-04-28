@@ -25,15 +25,15 @@
 
 #ifndef DECK_H
 #define DECK_H
+#include <QObject>
 
-#include <iostream>
-using std::cout;
-
-#include "Card.h"
+#include "CardC.h"
 #include "Random.h"
 
-class Deck
+class Deck : public QObject
 {
+    Q_OBJECT
+
 public:
 	//no arg ctor
 	Deck();
@@ -41,17 +41,17 @@ public:
 	//dtor
 	~Deck();
 
-	//shuffles Cards
+public slots:
 	void Shuffle();
 
 	//deals current Card
-	Card Deal();
+    CardC Deal();
 
 	//sets currentCard to 0
 	void ResetCurrent();
 
 private:
-	Card ** m_deck;
+    CardC * m_deck;
 
 	Random rand;
 
@@ -59,3 +59,4 @@ private:
 	
 };
 #endif 
+//done
