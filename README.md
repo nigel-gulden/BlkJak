@@ -7,11 +7,11 @@
 
 **Screenshots:**
 
-You will be able to select different card sets.<br>
-![alt text](https://github.com/nigel-gulden/gui-rpg/blob/master/readme_elem/Untitled-1.png?raw=true "Select a card")
+There will be a unique card back and jpeg's of all the cards.  You will also have your wager amount and total amout displayed.<br>
+![alt text]( "Select a card")
 
-The table will appear in a similar fashion to this.<br>
-![alt text] (https://github.com/nigel-gulden/gui-rpg/blob/master/readme_elem/how-to-play-blackjack-1.jpg?raw=true "table")
+There will be two menu screens, one that asks you to play and one that allows you to input your wager.<br>
+![alt text] ( "table")
 
 **Installation Instructions:** This will be updated as the project is built.
 
