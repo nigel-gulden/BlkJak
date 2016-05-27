@@ -8,10 +8,11 @@
 **Screenshots:**
 
 There will be a unique card back and jpeg's of all the cards.  You will also have your wager amount and total amout displayed.<br>
-![alt text]( "Select a card")
+![alt text](https://github.com/nigel-gulden/gui-rpg/blob/master/readme_elem/Cards.png?raw=true "Select a card")
 
 There will be two menu screens, one that asks you to play and one that allows you to input your wager.<br>
-![alt text] ( "table")
+![alt text] (https://github.com/nigel-gulden/gui-rpg/blob/master/readme_elem/Menu.png?raw=true "table")
+![alt text] (https://github.com/nigel-gulden/gui-rpg/blob/master/readme_elem/Wager.png?raw=true "table")
 
 **Installation Instructions:** This will be updated as the project is built.
 
