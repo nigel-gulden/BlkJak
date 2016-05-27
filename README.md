@@ -8,7 +8,7 @@
 **Screenshots:**
 
 There will be a unique card back and jpeg's of all the cards.  You will also have your wager amount and total amout displayed.<br>
-![alt text](https://github.com/nigel-gulden/BlkJak/blob/master/readme_elem/Cards.png?raw=true "Select a card")
+![alt text] (https://github.com/nigel-gulden/BlkJak/blob/master/readme_elem/Cards.PNG?raw=true "Select a card")
 
 There will be two menu screens, one that asks you to play and one that allows you to input your wager.<br>
 ![alt text] (https://github.com/nigel-gulden/BlkJak/blob/master/readme_elem/Menu.PNG?raw=true "table")
