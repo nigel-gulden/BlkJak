@@ -2,7 +2,8 @@ import QtQuick 2.6
 import QtQuick.Controls 1.5
 import QtQuick.Window 2.2
 import QtQml.Models 2.2
-import "CardCreation.js" as CardCreator
+
+//extension for c++ integration
 import MyExt 1.0
 import Qt.labs.settings 1.0
 
@@ -12,19 +13,25 @@ ApplicationWindow {
     visible: true
     width: 1024
     height: 768
+
+    //window title
     title: qsTr("BlkJak")
+
+    //saves current bankroll when program exited
     onClosing:
     {
         settings_global.bankroll = game.getBankroll()
     }
 
+    //bankroll and wager ints
     Settings
     {
         id: settings_global
         property int bankroll:0
-
+        property int wager: 0
     }
 
+    //input splash
     Dialog{
         id:dialog
         color: "green"
@@ -48,6 +55,7 @@ ApplicationWindow {
         textbox.anchors.top: dialog.top
         textbox.anchors.horizontalCenter: dialog.horizontalCenter
 
+        //box to input bankroll
         Rectangle
         {
             id: bankinputbg
@@ -57,23 +65,23 @@ ApplicationWindow {
             y: 100
             width: 300
             visible: false
+
             TextInput{
                 id: bankinputfield
                 font.pixelSize: 50
                 anchors.fill: bankinputbg
+                //once bankroll inputted, parses to int, sends to game logic
+                //and saves to settings
                 onAccepted:
                 {
                     var money = parseInt(text)
-                    console.log(money)
                     settings_global.bankroll = money
                     game.setBankroll(settings_global.bankroll)
                     dialog.visible = false
+                    bigwrapper.startGame()
                 }
-
             }
         }
-
-
 
         button.color: "blue"
         button.onHoverStart: button.color = "yellow"
@@ -90,6 +98,7 @@ ApplicationWindow {
         button.border.color: "black"
         property int step: 0
 
+        //button in splash
         Button
         {
             id: no
@@ -97,6 +106,9 @@ ApplicationWindow {
             visible: false
             anchors.bottom: dialog.bottom
             anchors.right: dialog.button.left
+
+            //when clicked, makes button transparent, asks how much you want to spend
+            //and starts game
             onClicked:
             {
                 dialog.textbox.textstring = "How much do you wanna\nspend today?"
@@ -106,41 +118,65 @@ ApplicationWindow {
             }
         }
 
+        //when splash button is clicked...
         button.onButtonClicked:
         {
+            //if it hasn't been clicked before...
             if(step === 0)
             {
+                //if there's no saved money, asks if you want to use leftover bank
                 if(settings_global.bankroll > 0)
                 {
                     dialog.textbox.textstring = "You still got some money left\nWanna use that up first?"
                     button.buttonText.text = "Yes!"
                     no.visible = true
-
                 }
+                //if there's no money in bank, asks how much to put in bank
                 else
                 {
                     dialog.textbox.textstring = "How much do you wanna\nspend today?"
                     button.visible = false
                     bankinputbg.visible = true
                 }
-
             }
+
+            //if it's been clicked before, set the bankroll as settings and starts game
             if(step === 1)
             {
                 game.setBankroll(settings_global.bankroll)
                 dialog.visible = false
+                bigwrapper.startGame()
             }
             step++
-
         }
     }
 
-
+    //game wrapper
     Rectangle
     {
         id:bigwrapper
         anchors.fill:parent
         color: "blue"
+
+        //clears hands, makes wager button visible, and all others transparent,
+        //and sets up textboxes
+        function startGame()
+        {
+            playerhand.clear()
+            dealerhand.clear()
+            wagerButton.visible = true
+            inputmsg.visible = true
+            overDialog.visible = false
+            banktotal.text = "Bank: " + game.getBankroll()
+            inputwager.visible = true
+            wagertotal.visible = false
+        }
+        function gameOver()
+        {
+            hitButton.visible = false
+            stayButton.visible = false
+            overDialog.visible = true
+        }
 
         function appendPlayerModel( i)
         {
@@ -154,9 +190,21 @@ ApplicationWindow {
         }
         function appendDealerModel( i)
         {
-            var r = game.getDealerCardAt(i).GetRank()
-            var s = game.getDealerCardAt(i).GetSuit()
-            var address = "cardimg/" + (s*13 + r) + ".png"
+            var r
+            var s
+            var address
+            if(i === -1)
+            {
+                r = game.getDealerCardAt(1).GetRank()
+                s = game.getDealerCardAt(1).GetSuit()
+                address = "cardimg/back.png"
+            }
+            else
+            {
+                r = game.getDealerCardAt(i).GetRank()
+                s = game.getDealerCardAt(i).GetSuit()
+                address = "cardimg/" + (s*13 + r) + ".png"
+            }
             dealerhand.append({clr: "red",
                                   drank: r,
                                   dsuit: s,
@@ -210,12 +258,54 @@ ApplicationWindow {
                 {
                     id: inputwager
                     height: playerbank.height/3
+                    anchors.topMargin: 15
+                    anchors.top: playerbank.top
+                    anchors.leftMargin: 50
+                    anchors.left: playerbank.horizontalCenter
+
+                    anchors.right: playerbank.right
+
+                    font.pixelSize: playerbank.height/3
+                    visible: false
+                }
+                Text
+                {
+                    id: inputmsg
+                    height: playerbank.height/3
+                    anchors.top: playerbank.top
+                    anchors.left: playerbank.left
+
+                    anchors.right: playerbank.horizontalCenter
+                    font.pixelSize: playerbank.height/3
+                    text: "Input wager: "
+                    visible: false
+                }
+
+
+                Text
+                {
+                    id: wagertotal
+
+                    height: playerbank.height/3
                     anchors.top: playerbank.top
                     anchors.left: playerbank.left
                     anchors.right: playerbank.right
-                    font.pixelSize: 70
+                    font.pixelSize: playerbank.height/3
 
+                    visible: false
                 }
+
+                Text
+                {
+                    id: banktotal
+                    height: playerbank.height/3
+                    anchors.bottom: playerbank.bottom
+                    anchors.left: playerbank.left
+                    anchors.right: playerbank.right
+                    font.pixelSize: playerbank.height/3
+                }
+
+
             }
         }
         ListModel
@@ -320,33 +410,61 @@ ApplicationWindow {
             color: "black"
 
             anchors.bottom: parent.bottom
+            Button
+            {
+                id: wagerButton
+                property int w: 0
+                text: "Wager"
+                anchors.centerIn: buttonbar
+                visible: false
+                onClicked:
+                {
+                    var wager = parseInt(inputwager.text)
+                    settings_global.wager = wager
+
+                    game.Wager(settings_global.wager)
+                    dealbutton.visible = true
+                    wagerButton.visible = false
+                    inputwager.visible = false
+                    inputmsg.visible = false
+                    wagertotal.visible = true
+                    wagertotal.text = "Wager: " + game.getPot()
+                    banktotal.text = "Bank: " + game.getBankroll()
+                }
+            }
 
             Button
             {
                 id: dealbutton
                 text: "Deal"
                 anchors.centerIn: buttonbar
-
+                property bool twentyone: false
+                visible: false
                 onClicked:
                 {
-
-
-
-
+                    game.dealIn()
                     bigwrapper.appendPlayerModel(0)
                     bigwrapper.appendPlayerModel(1)
                     bigwrapper.appendDealerModel(0)
-                    bigwrapper.appendDealerModel(1)
+                    bigwrapper.appendDealerModel(-1)
                     dealbutton.visible = false
                     hitButton.visible = true
                     stayButton.visible = true
-                    console.log(game.getBankroll())
-                    inputwager.text = game.getBankroll()
+
+                    twentyone = game.Check21()
+
+                    onTwentyoneChanged:
+                    {
+                        if(twentyone === true)
+                        {
+                            console.log("21!")
+                            game.Win21()
+                            overDialog.textbox.textstring = "Twenty one!\nplay again?"
+                            bigwrapper.gameOver()
+                        }
+                    }
 
                 }
-
-
-
             }
             Button
             {
@@ -361,33 +479,31 @@ ApplicationWindow {
 
                 onClicked:
                 {
-
                     game.HitPlayer()
                     bigwrapper.appendPlayerModel(game.getPlayerCardCount()-1)
                     bust = game.CheckBust()
                     twentyone = game.Check21()
-
                 }
                 onBustChanged:
                 {
                     if(bust == true)
                     {
-                        console.log("lose")
-                        hitButton.visible = false
-                        stayButton.visible = false
+                        bigwrapper.gameOver()
+                        overDialog.textbox.textstring = "Bust\nplay again?"
                     }
                 }
+
                 onTwentyoneChanged:
                 {
                     if(twentyone === true)
                     {
                         console.log("21!")
-                        hitButton.visible = false
-                        stayButton.visible = false
+                        game.Win()
+                        overDialog.textbox.textstring = "You win!\nplay again?"
+                        bigwrapper.gameOver()
                     }
-
-
                 }
+
             }
             Button
             {
@@ -412,14 +528,22 @@ ApplicationWindow {
                     if(dealerbust == false && game.getDealerTotal() > game.getPlayerTotal())
                     {
                         console.log("Dealer wins")
+                        overDialog.textbox.textstring = "Dealer wins\nplay again?"
+                        bigwrapper.gameOver()
                     }
                     else if(game.getDealerTotal() === game.getPlayerTotal())
                     {
                         console.log("Tie!")
+                        game.Tie()
+                        overDialog.textbox.textstring = "Tie game\nplay again?"
+                        bigwrapper.gameOver()
                     }
                     else
                     {
                         console.log("You win!")
+                        game.Win()
+                        overDialog.textbox.textstring = "You win!\nplay again?"
+                        bigwrapper.gameOver()
                     }
                 }
 
@@ -428,7 +552,60 @@ ApplicationWindow {
 
     }
 
-    menuBar: MenuBar {
+    Dialog{
+        id: overDialog
+        color: "green"
+        height: 300
+        width: 500
+        x: 234
+        y: 262
+
+        border.color: "black"
+        border.width: 8
+        radius: 20
+
+        textbox.textcolor: "yellow"
+        textbox.color: "transparent"
+        textbox.textfont.pointSize: 20
+
+        textbox.width: 500
+        textbox.height: 100
+        textbox.anchors.top: overDialog.top
+        textbox.anchors.horizontalCenter: overDialog.horizontalCenter
+        visible: false
+
+        Rectangle
+        {
+            id: overButtonBar
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            height: 100
+            color: "transparent"
+            Button
+            {
+                id: yesButton
+                text: "Yes"
+                anchors.leftMargin: 70
+                anchors.left: parent.left
+                onClicked:
+                {
+                    bigwrapper.startGame()
+                }
+            }
+            Button
+            {
+                id: noButton
+                text: "No"
+                anchors.rightMargin: 70
+                anchors.right: parent.right
+                onClicked: Qt.quit();
+            }
+        }
+    }
+
+    menuBar: MenuBar
+    {
     id: menubar
         Menu
         {
@@ -438,7 +615,8 @@ ApplicationWindow {
                 text: qsTr("New Game")
                 onTriggered:
                 {
-                    game.dealIn();
+                    bigwrapper.startGame()
+
                 }
             }
             MenuItem {

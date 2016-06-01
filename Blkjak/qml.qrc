@@ -3,7 +3,6 @@
         <file>main.qml</file>
         <file>MainForm.ui.qml</file>
         <file>Card.qml</file>
-        <file>CardCreation.js</file>
         <file>1.jpeg</file>
         <file>2.png</file>
         <file>cardimg/0.png</file>
@@ -76,5 +75,6 @@
         <file>Button.qml</file>
         <file>Dialog.qml</file>
         <file>TextRect.qml</file>
+        <file>cardimg/back.png</file>
     </qresource>
 </RCC>

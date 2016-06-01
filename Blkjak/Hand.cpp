@@ -33,6 +33,12 @@ Hand& Hand::operator=(const Hand& rhs)
    return *this;
 }
 
+void Hand::Clear()
+{
+    delete[] mCards;
+    mCards = nullptr;
+    mCount = 0;
+}
 
 Hand::~Hand()
 {
@@ -84,9 +90,9 @@ int Hand::FindCardTotal()
 	{
         rank = mCards[i].GetRank();
         rank++;
-        if (rank > 1 && rank < 10)
+        if (rank > 1 && rank < 11)
 		{
-            totalCount += rank+1;
+            totalCount += rank;
 		}
         else if (rank == 1)
 		{

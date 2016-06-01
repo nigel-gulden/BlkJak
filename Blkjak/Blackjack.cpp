@@ -6,6 +6,7 @@ Blackjack::Blackjack() : QObject()
 {
 	mDeck.Shuffle();
 	mDeck.Shuffle();
+    mPot = 0;
 }
 
 CardC* Blackjack::getPlayerCardAt(int index)
@@ -48,10 +49,13 @@ int Blackjack::getPot()
     return mPot;
 }
 
-
-
 void Blackjack::dealIn()
 {
+    if(mPlayer.GetmCount() > 0)
+    {
+        mPlayer.Clear();
+        mDealer.Clear();
+    }
    HitPlayer();
    HitPlayer();
    mDealer.Hit(mDeck.Deal());
@@ -67,7 +71,7 @@ bool Blackjack::Wager(int wager)
 
 
     //if wager is in range
-    if (wager <= playerBank && wager > 0 && playerBank <= 0)
+    if (wager <= playerBank && wager > 0 && playerBank > 0)
     {
         //sets pot to wager
         mPot = wager;
@@ -130,7 +134,7 @@ bool Blackjack::DealerHand()
     bool hit = false;
 
 	//asks dealer if they want to hit
-    if(mDealer.FindCardTotal()<17)
+    if(mDealer.FindCardTotal()<16)
     {
         hit = true;
     }
@@ -142,16 +146,16 @@ bool Blackjack::DealerHand()
 		mDealer.Hit(mDeck.Deal());
 
 		//if hand is larger than 21, dealer busts
-        if (mDealer.FindCardTotal() > 20)
+        if (mDealer.FindCardTotal() > 21)
 		{
 			bust = true;
 		}
 		//if dealer doesn't bust, ask if dealer wants to hit
 		if (bust == false)
 		{
-            if(mDealer.FindCardTotal()<16)
+            if(mDealer.FindCardTotal()>16)
             {
-                hit = true;
+                hit = false;
             }
 		}
 	}

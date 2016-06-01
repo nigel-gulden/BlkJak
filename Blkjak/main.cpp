@@ -6,21 +6,16 @@
 #include "CardC.h"
 #include "Hand.h"
 #include "Blackjack.h"
-
 #include "Deck.h"
-
 #include "Random.h"
 
 int main(int argc, char *argv[])
 {
-
-
     QGuiApplication app(argc, argv);
 
     QCoreApplication::setApplicationName("April18");
     QCoreApplication::setOrganizationName("Chessgames");
     QCoreApplication::setOrganizationDomain(".com");
-
 
     QQmlApplicationEngine engine;
     Deck d;
@@ -28,7 +23,7 @@ int main(int argc, char *argv[])
     Hand player;
     Blackjack game;
     d.Shuffle();
-game.dealIn();
+
     qmlRegisterType<CardC>("MyExt", 1, 0, "CardC");
     qmlRegisterType<Deck>("MyExt", 1, 0, "DeckC");
     qRegisterMetaType<CardC>();

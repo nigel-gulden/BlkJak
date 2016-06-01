@@ -18,7 +18,7 @@ public slots:
     CardC* getCardAt(int index);
 	int GetmCount();
 
-
+    void Clear();
     void Hit(const CardC & dealt);
 
 	int FindCardTotal();
